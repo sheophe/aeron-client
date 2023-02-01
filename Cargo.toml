@@ -26,6 +26,3 @@ memoffset = "0.6.4"
 tempfile = "3.1"
 hdrhistogram = "6.0"
 structopt = "0.3"
-
-[build-dependencies]
-rustc_version   = "0.3"
