@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-extern crate aeron_rs;
+extern crate aeron_client;
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use aeron_rs::aeron::Aeron;
-use aeron_rs::context::Context;
+use aeron_client::aeron::Aeron;
+use aeron_client::context::Context;
 use lazy_static::lazy_static;
 
-use aeron_rs::concurrent::counters::CountersReader;
+use aeron_client::concurrent::counters::CountersReader;
 
 // IMPORTANT NOTICE: currently integration test can only work sequentially
 // Run them with command: $ cargo test -- --test-threads=1

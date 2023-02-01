@@ -20,7 +20,7 @@ use std::{
     time::Duration,
 };
 
-use aeron_rs::{
+use aeron_client::{
     cnc_file_descriptor,
     concurrent::counters::CountersReader,
     context::Context,

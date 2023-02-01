@@ -34,7 +34,7 @@ pub struct DataHeaderDefn {
     session_id: i32,
     stream_id: i32,
     term_id: i32,
-    data: [u8; 1],
+    data: *mut u8,
 }
 
 #[allow(dead_code)]
@@ -76,7 +76,7 @@ impl DataHeaderFlyweight {
 
     #[inline]
     pub fn data(&self) -> *const u8 {
-        unsafe { (*self.m_struct).data.as_ptr() }
+        unsafe { (*self.m_struct).data }
     }
 
     // Setters

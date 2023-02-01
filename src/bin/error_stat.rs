@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-use aeron_rs::cnc_file_descriptor::{self, CNC_FILE, CNC_VERSION};
-use aeron_rs::context::Context;
-use aeron_rs::utils::{
+use aeron_client::cnc_file_descriptor::{self, CNC_FILE, CNC_VERSION};
+use aeron_client::context::Context;
+use aeron_client::utils::{
     errors::error_log_reader,
     memory_mapped_file::MemoryMappedFile,
     misc::{semantic_version_major, semantic_version_to_string},
@@ -41,7 +41,7 @@ fn parse_cmd_line() -> CmdOpts {
 
 fn format_date(milliseconds_since_epoch: i64) -> String {
     // yyyy-MM-dd HH:mm:ss.SSSZ
-    let time = Local.timestamp_millis(milliseconds_since_epoch);
+    let time = Local.timestamp_millis_opt(milliseconds_since_epoch).unwrap();
     time.to_string()
 }
 

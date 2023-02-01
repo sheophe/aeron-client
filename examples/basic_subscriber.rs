@@ -20,7 +20,7 @@ use std::{
     sync::atomic::{AtomicBool, AtomicI64, Ordering},
 };
 
-use aeron_rs::{
+use aeron_client::{
     aeron::Aeron,
     concurrent::{
         atomic_buffer::AtomicBuffer,

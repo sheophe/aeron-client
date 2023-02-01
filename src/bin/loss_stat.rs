@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-use aeron_rs::{
+use aeron_client::{
     concurrent::reports::{self, loss_report_descriptor},
     context::Context,
     utils::memory_mapped_file::MemoryMappedFile,
@@ -39,7 +39,7 @@ fn parse_cmd_line() -> CmdOpts {
 
 fn format_date(milliseconds_since_epoch: i64) -> String {
     // yyyy-MM-dd HH:mm:ss.SSSZ
-    let time = Local.timestamp_millis(milliseconds_since_epoch);
+    let time = Local.timestamp_millis_opt(milliseconds_since_epoch).unwrap();
     time.to_string()
 }
 

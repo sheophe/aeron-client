@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-extern crate aeron_rs;
+extern crate aeron_client;
 
 use std::ffi::CString;
 use std::sync::atomic::{AtomicBool, AtomicI64, Ordering};
 use std::time::Duration;
 use std::{slice, thread};
 
-use aeron_rs::{
+use aeron_client::{
     aeron::Aeron,
     concurrent::{
         atomic_buffer::{AlignedBuffer, AtomicBuffer},

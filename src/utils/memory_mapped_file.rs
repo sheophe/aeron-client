@@ -66,7 +66,6 @@ impl FileHandle {
 #[derive(Debug)]
 pub struct MemoryMappedFile {
     ptr: *mut u8,
-    fd: FileHandle,
     memory_size: Index,
 }
 
@@ -100,7 +99,6 @@ impl MemoryMappedFile {
 
         let mmf = Self {
             ptr: fd.mmap.as_mut_ptr(),
-            fd,
             memory_size: length,
         };
 

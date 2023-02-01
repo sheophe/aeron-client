@@ -21,7 +21,7 @@ use std::{
     time::Duration,
 };
 
-use aeron_rs::{
+use aeron_client::{
     aeron::Aeron,
     concurrent::{
         atomic_buffer::{AlignedBuffer, AtomicBuffer},
