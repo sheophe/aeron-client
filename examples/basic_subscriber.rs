@@ -91,7 +91,8 @@ fn error_handler(error: AeronError) {
 
 fn on_new_fragment(buffer: &AtomicBuffer, offset: Index, length: Index, header: &Header) {
     unsafe {
-        let slice_msg = slice::from_raw_parts_mut(buffer.buffer().offset(offset as isize), length as usize);
+        let slice_msg =
+            slice::from_raw_parts_mut(buffer.buffer().offset(offset as isize), length as usize);
         let msg = CString::new(slice_msg).unwrap();
         println!(
             "Message to stream {} from session {} ({}@{}): <<{}>>",
@@ -118,7 +119,10 @@ fn main() {
 
     let settings = parse_cmd_line();
 
-    println!("Subscribing Pong at {} on Stream ID {}", settings.channel, settings.stream_id);
+    println!(
+        "Subscribing Pong at {} on Stream ID {}",
+        settings.channel, settings.stream_id
+    );
 
     let mut context = Context::new();
 
@@ -128,9 +132,16 @@ fn main() {
 
     println!("Using CnC file: {}", context.cnc_file_name());
 
-    context.set_new_subscription_handler(Box::new(|channel: CString, stream_id: i32, correlation_id: i64| {
-        println!("Subscription: {} {} {}", channel.to_str().unwrap(), stream_id, correlation_id)
-    }));
+    context.set_new_subscription_handler(Box::new(
+        |channel: CString, stream_id: i32, correlation_id: i64| {
+            println!(
+                "Subscription: {} {} {}",
+                channel.to_str().unwrap(),
+                stream_id,
+                correlation_id
+            )
+        },
+    ));
     context.set_available_image_handler(Box::new(available_image_handler));
     context.set_unavailable_image_handler(Box::new(unavailable_image_handler));
     context.set_error_handler(Box::new(error_handler));
@@ -170,7 +181,10 @@ fn main() {
     let idle_strategy = SleepingIdleStrategy::new(1000);
 
     while RUNNING.load(Ordering::SeqCst) {
-        let fragments_read = subscription.lock().expect("Fu").poll(&mut on_new_fragment, 10);
+        let fragments_read = subscription
+            .lock()
+            .expect("Fu")
+            .poll(&mut on_new_fragment, 10);
         idle_strategy.idle_opt(fragments_read);
     }
 }

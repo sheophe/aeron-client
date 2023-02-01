@@ -71,7 +71,12 @@ fn error_handler(error: AeronError) {
     println!("Error: {:?}", error);
 }
 
-fn on_new_publication_handler(channel: CString, stream_id: i32, session_id: i32, correlation_id: i64) {
+fn on_new_publication_handler(
+    channel: CString,
+    stream_id: i32,
+    session_id: i32,
+    correlation_id: i64,
+) {
     println!(
         "Publication: {} {} {} {}",
         channel.to_str().unwrap(),
@@ -158,7 +163,10 @@ fn main() {
         println!("offering {}/{}", i + 1, settings.number_of_messages);
         let _unused = stdout().flush();
 
-        let result = publication.lock().unwrap().offer_part(src_buffer, 0, c_str_msg.len() as i32);
+        let result = publication
+            .lock()
+            .unwrap()
+            .offer_part(src_buffer, 0, c_str_msg.len() as i32);
 
         if let Ok(code) = result {
             println!("Sent with code {}!", code);
