@@ -21,7 +21,7 @@ use std::{
     path::Path,
 };
 
-use memmap::MmapMut;
+use memmap2::MmapMut;
 
 use crate::concurrent::atomic_buffer::AtomicBuffer;
 use crate::utils::{errors::AeronError, types::Index};
@@ -68,12 +68,23 @@ impl FileHandle {
             .map_err(AeronError::MemMappedFileError)
             .map(move |mmap| Self { mmap, file_path })
     }
+
+    #[cfg(unix)]
+    fn lock(&mut self) -> Result<(), AeronError> {
+        self.mmap.lock().map_err(AeronError::MemMappedFileError)
+    }
+
+    #[cfg(unix)]
+    fn unlock(&mut self) -> Result<(), AeronError> {
+        self.mmap.unlock().map_err(AeronError::MemMappedFileError)
+    }
 }
 
 #[derive(Debug)]
 pub struct MemoryMappedFile {
     ptr: *mut u8,
     memory_size: Index,
+    fd: FileHandle,
 }
 
 // Mutable access to the ptr goes through creation of AtomicBuffer which is thread safe.
@@ -116,6 +127,7 @@ impl MemoryMappedFile {
         let mmf = Self {
             ptr: fd.mmap.as_mut_ptr(),
             memory_size: length,
+            fd,
         };
 
         Ok(mmf)
@@ -154,6 +166,14 @@ impl MemoryMappedFile {
 
     pub fn atomic_buffer(&self, offset: Index, size: Index) -> AtomicBuffer {
         unsafe { AtomicBuffer::new(self.ptr.offset(offset as isize), size) }
+    }
+
+    pub fn lock(&mut self) -> Result<(), AeronError> {
+        self.fd.lock()
+    }
+
+    pub fn unlock(&mut self) -> Result<(), AeronError> {
+        self.fd.unlock()
     }
 }
 
@@ -212,18 +232,22 @@ mod tests {
         {
             let mut file = MemoryMappedFile::create_new(file_path.clone(), 0, size).unwrap();
 
+            file.lock().unwrap();
             for n in 0..size as usize {
                 let to_write = (n & 0xff) as u8;
                 file.memory_mut_ptr()[n] = to_write;
             }
+            file.unlock().unwrap();
         }
 
-        let file = MemoryMappedFile::map_existing(file_path, false).unwrap();
+        let mut file = MemoryMappedFile::map_existing(file_path, false).unwrap();
 
+        file.lock().unwrap();
         for n in 0..size as usize {
             let b = file.memory_ptr();
             let option = *b.get(n).unwrap();
             assert_eq!(option, (n & 0xff) as u8)
         }
+        file.unlock().unwrap();
     }
 }

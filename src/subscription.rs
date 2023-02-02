@@ -337,6 +337,9 @@ impl Subscription {
      * @return Image associated with the given session_id or nullptr if no Image exist.
      */
     pub fn image_by_session_id(&self, session_id: i32) -> Option<&Image> {
+        if self.is_closed() {
+            return None;
+        }
         let list = self.image_list.load();
         list.iter().find(|img| img.session_id() == session_id)
     }
@@ -351,6 +354,9 @@ impl Subscription {
      */
 
     pub fn image_by_index(&mut self, index: usize) -> Option<&mut Image> {
+        if self.is_closed() {
+            return None;
+        }
         let list = self.image_list.load_mut();
         list.get_mut(index)
     }

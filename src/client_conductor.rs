@@ -325,7 +325,7 @@ impl ClientConductor {
         inter_service_timeout_ns: Moment,
         pre_touch_mapped_memory: bool,
     ) -> Arc<Mutex<Self>> {
-        let mut selfy = Self {
+        let mut conductor = Self {
             publication_by_registration_id: Default::default(),
             exclusive_publication_by_registration_id: Default::default(),
             subscription_by_registration_id: Default::default(),
@@ -364,15 +364,17 @@ impl ClientConductor {
             padding: [0; crate::utils::misc::CACHE_LINE_LENGTH as usize],
         };
 
-        selfy
+        conductor
             .on_available_counter_handlers
             .push(on_available_counter_handler);
-        selfy
+        conductor
             .on_unavailable_counter_handlers
             .push(on_unavailable_counter_handler);
-        selfy.on_close_client_handlers.push(on_close_client_handler);
+        conductor
+            .on_close_client_handlers
+            .push(on_close_client_handler);
 
-        let arc_selfy = Arc::new(Mutex::new(selfy));
+        let arc_selfy = Arc::new(Mutex::new(conductor));
         let another_selfy = arc_selfy.clone();
         let mut another_selfy_mut = another_selfy.lock().expect("Mutex poisoned");
         another_selfy_mut.driver_listener_adapter = Some(DriverListenerAdapter::new(

@@ -132,3 +132,9 @@ fabric.properties
 # End of https://www.gitignore.io/api/intellij
 
 .vscode/
+
+# Files generated from tests
+abc.file
+
+# Aeron build files
+build/
