@@ -3,6 +3,8 @@
 [![minimum rustc version](https://img.shields.io/badge/rustc-1.39+-green.svg)](https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html)
 
 ## About *aeron-client*
+This is the fork of [aeron-rs](https://github.com/UnitedTraders/aeron-rs). It aims to make the library compatible with macOS and reduce the amount of unsafe code.
+
 Aeron is efficient reliable UDP and IPC message transport. Originally it was developed by RealLogic 
 and hosted on GitHub [real-logic/aeron](https://github.com/real-logic/aeron)
 
