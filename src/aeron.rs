@@ -141,7 +141,7 @@ impl Aeron {
 
         let use_agent_invoker = context.use_conductor_agent_invoker();
 
-        let mut aeronchik = Self {
+        let mut aeron = Self {
             session_id_distribution: Uniform::from(std::i32::MIN..std::i32::MAX),
             context: context.clone(),
             cnc_buffer: cnc_buf,
@@ -169,12 +169,12 @@ impl Aeron {
         );
 
         if use_agent_invoker {
-            aeronchik.conductor_invoker.start();
+            aeron.conductor_invoker.start();
         } else {
-            aeronchik.conductor_stopper = Some(AgentRunner::start(conductor_runner)?);
+            aeron.conductor_stopper = Some(AgentRunner::start(conductor_runner)?);
         }
 
-        Ok(aeronchik)
+        Ok(aeron)
     }
 
     /**

@@ -30,11 +30,21 @@ Application can use IPC (shared memory) today and could switch to UDP in a matte
 * Can work over UDP which is generally faster than over TCP (as some other messaging systems do)
 * Provides reliable and ordered message flow (even over UPD). Not all fast messaging frameworks guaranty messages order but Aeron do
 
+## Status
+* Integration tests are successful on macOS and Linux
+* Unit test are mainly successful (224/227 ok on macOS)
+
 ## Running library tests
-Integration tests for *aeron-client* assume that Media driver executable (aeronmd) is present in the PATH. So prior
+Integration tests for *aeron-client* assume that Media Driver executable (aeronmd) is present in the PATH. So prior
 to run these tests install *aeronmd* accordingly.
-Also integration tests designed to run sequentially one by one. Therefore use 
+Also integration tests designed to run sequentially one by one. This is beacuse these tests execute *aeronmd* binary
+to communicate with, and would conflict when run simultaneously. Therefore use
 ```
 cargo test -- --test-threads=1
+```
+
+To run integration test only use
+```
+cargo test --test '*' -- --test-threads=1
 ```
 command to run them.

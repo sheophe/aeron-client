@@ -16,6 +16,7 @@
 
 use std::env;
 use std::ffi::CString;
+use std::path::Path;
 use std::sync::Arc;
 
 use crate::utils::errors::GenericError;
@@ -701,7 +702,15 @@ impl Context {
         }
     }
 
+    #[cfg(target_os = "linux")]
     pub fn default_aeron_path() -> String {
         String::from("/dev/shm/aeron-") + &Context::get_user_name()
+    }
+
+    #[cfg(target_os = "macos")]
+    pub fn default_aeron_path() -> String {
+        let path =
+            Path::new(&Self::tmp_dir()).join("aeron-".to_string() + &Context::get_user_name());
+        path.to_str().unwrap().to_string()
     }
 }
