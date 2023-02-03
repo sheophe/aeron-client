@@ -38,13 +38,12 @@ Application can use IPC (shared memory) today and could switch to UDP in a matte
 Integration tests for *aeron-client* assume that Media Driver executable (aeronmd) is present in the PATH. So prior
 to run these tests install *aeronmd* accordingly.
 Also integration tests designed to run sequentially one by one. This is beacuse these tests execute *aeronmd* binary
-to communicate with, and would conflict when run simultaneously. Therefore use
+to communicate with, and would conflict when run simultaneously. Therefore use the following command:
 ```
 cargo test -- --test-threads=1
 ```
 
-To run integration test only use
+To run integration tests only use the following command:
 ```
 cargo test --test '*' -- --test-threads=1
 ```
-command to run them.
